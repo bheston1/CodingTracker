@@ -49,7 +49,7 @@ q - Close application");
 
                     default:
                         Console.WriteLine("\nInvalid command - Press ENTER");
-                        HelperFunctions.PressEnter();
+                        Helpers.PressEnter();
                         Console.Clear();
                         break;
                 }

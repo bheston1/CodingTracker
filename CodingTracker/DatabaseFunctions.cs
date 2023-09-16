@@ -11,9 +11,10 @@ namespace CodingTracker
 {
     internal class DatabaseFunctions
     {
+        static readonly string connectionString = ConfigurationManager.AppSettings.Get("ConnectionString");
+
         internal static void CreateDB()
         {
-            string connectionString = ConfigurationManager.AppSettings.Get("ConnectionString");
             using (var connection = new SqliteConnection(connectionString))
             {
                 connection.Open();
@@ -22,6 +23,25 @@ namespace CodingTracker
                 tableCommand.ExecuteNonQuery();
                 connection.Close();
             }
+        }
+
+        internal static void AddSession()
+        {
+            Console.Clear();
+            string date = Helpers.GetDateInput();
+            string sessionStart = Helpers.GetSessionTimes("Enter session start time (format hh:mm AM/PM): ");
+            string sessionEnd = Helpers.GetSessionTimes("Enter session end time (format hh:mm AM/PM): ");
+            TimeSpan sessionDuration = Helpers.CalculateDuration(sessionStart, sessionEnd);
+
+            using (var connection = new SqliteConnection(connectionString))
+            {
+                connection.Open();
+                var command = connection.CreateCommand();
+                command.CommandText = $"INSERT INTO Sessions (Date, Start, End, Duration) VALUES ('{date}', '{sessionStart}', '{sessionEnd}', '{sessionDuration}')";
+                command.ExecuteNonQuery();
+                connection.Close();
+            }
+            Menu.ShowMenu();
         }
     }
 }
