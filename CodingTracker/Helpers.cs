@@ -27,6 +27,19 @@ namespace CodingTracker
             return dateInput;
         }
 
+        internal static object GetIdInput(string message)
+        {
+            Console.Write(message);
+            string idInput = Console.ReadLine();
+            while (!Int32.TryParse(idInput, out _) || Convert.ToInt32(idInput) < 0)
+            {
+                Console.WriteLine("Invalid Id, try again");
+                idInput = Console.ReadLine();
+            }
+            int finalInput = Convert.ToInt32(idInput);
+            return finalInput;
+        }
+
         internal static string GetSessionTimes(string message)
         {
             Console.Write(message);

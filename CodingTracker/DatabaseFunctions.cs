@@ -47,6 +47,37 @@ namespace CodingTracker
             Menu.ShowMenu();
         }
 
+        internal static void UpdateSession()
+        {
+            ViewSessions();
+            var recordId = Helpers.GetIdInput("Enter Id of session to update or type 'r' to return to main menu: ");
+            using (var connection = new SqliteConnection(connectionString))
+            {
+                connection.Open();
+                var checkCmd = connection.CreateCommand();
+                checkCmd.CommandText = $"SELECT EXISTS(SELECT 1 FROM Sessions WHERE Id = {recordId})";
+                int checkQuery = Convert.ToInt32(checkCmd.ExecuteScalar());
+                if (checkQuery == 0)
+                {
+                    Console.WriteLine("Enter valid Id");
+                    connection.Close();
+                    UpdateSession();
+                }
+                else if (Convert.ToString(checkQuery).Trim().ToLower() == "r")
+                {
+                    Menu.ShowMenu();
+                }
+                string sessionStart = Helpers.GetSessionTimes("Enter session start time (format hh:mm AM/PM): ");
+                string sessionEnd = Helpers.GetSessionTimes("Enter session end time (format hh:mm AM/PM): ");
+                TimeSpan sessionDuration = Helpers.CalculateDuration(sessionStart, sessionEnd);
+                var command = connection.CreateCommand();
+                command.CommandText = $"UPDATE Sessions SET Start = '{sessionStart}', End = '{sessionEnd}', Duration = '{sessionDuration}' WHERE Id = {recordId}";
+                command.ExecuteNonQuery();
+                connection.Close();
+                Menu.ShowMenu();
+            }
+        }
+
         internal static void ViewSessions()
         {
             Console.Clear();
