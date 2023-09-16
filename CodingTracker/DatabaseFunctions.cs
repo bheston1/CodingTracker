@@ -117,5 +117,20 @@ namespace CodingTracker
                 Console.WriteLine("----------------------------------------------------------------------------------------------------\n");
             }
         }
+
+        internal static void DeleteSession()
+        {
+            ViewSessions();
+            var recordId = Helpers.GetIdInput("Enter Id of session to delete: ");
+            using (var connection = new SqliteConnection(connectionString))
+            {
+                connection.Open();
+                var command = connection.CreateCommand();
+                command.CommandText = $"DELETE FROM Sessions WHERE Id = '{recordId}'";
+                command.ExecuteNonQuery();
+                connection.Close();
+            }
+            Menu.ShowMenu();
+        }
     }
 }

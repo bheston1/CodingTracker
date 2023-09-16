@@ -31,11 +31,11 @@ q - Close application");
                         break;
 
                     case "u":
-
+                        DatabaseFunctions.UpdateSession();
                         break;
 
                     case "d":
-
+                        DatabaseFunctions.DeleteSession();
                         break;
 
                     case "v":
