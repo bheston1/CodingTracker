@@ -27,7 +27,7 @@ q - Close application");
                 switch (menuInput.Trim().ToLower())
                 {
                     case "a":
-
+                        DatabaseFunctions.AddSession();
                         break;
 
                     case "u":
@@ -39,7 +39,7 @@ q - Close application");
                         break;
 
                     case "v":
-
+                        DatabaseFunctions.ViewSessions();
                         break;
 
                     case "q":

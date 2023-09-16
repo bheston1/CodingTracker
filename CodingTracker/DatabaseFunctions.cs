@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 using System.Configuration;
 using System.Collections.Specialized;
 using Microsoft.Data.Sqlite;
+using System.Globalization;
+using ConsoleTableExt;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace CodingTracker
 {
@@ -18,9 +21,9 @@ namespace CodingTracker
             using (var connection = new SqliteConnection(connectionString))
             {
                 connection.Open();
-                var tableCommand = connection.CreateCommand();
-                tableCommand.CommandText = "CREATE TABLE IF NOT EXISTS Sessions (Id INTEGER PRIMARY KEY AUTOINCREMENT, Date TEXT, Start TEXT, End TEXT, Duration TEXT)";
-                tableCommand.ExecuteNonQuery();
+                var command = connection.CreateCommand();
+                command.CommandText = "CREATE TABLE IF NOT EXISTS Sessions (Id INTEGER PRIMARY KEY AUTOINCREMENT, Date TEXT, Start TEXT, End TEXT, Duration TEXT)";
+                command.ExecuteNonQuery();
                 connection.Close();
             }
         }
@@ -42,6 +45,46 @@ namespace CodingTracker
                 connection.Close();
             }
             Menu.ShowMenu();
+        }
+
+        internal static void ViewSessions()
+        {
+            Console.Clear();
+            using (var connection = new SqliteConnection(connectionString))
+            {
+                connection.Open();
+                var command = connection.CreateCommand();
+                command.CommandText = "SELECT * FROM Sessions ORDER BY Date DESC";
+
+                List<CodingSession> tableData = new List<CodingSession>();
+
+                SqliteDataReader reader = command.ExecuteReader();
+                if (reader.HasRows)
+                {
+                    while (reader.Read())
+                    {
+                        tableData.Add(new CodingSession
+                        {
+                            Id = reader.GetInt32(0),
+                            Date = DateTime.ParseExact(reader.GetString(1), "MM/dd/yyyy", new CultureInfo("en-US")),
+                            Start = DateTime.ParseExact(reader.GetString(2), "hh:mm tt", new CultureInfo("en-US")),
+                            End = DateTime.ParseExact(reader.GetString(3), "hh:mm tt", new CultureInfo("en-US")),
+                            Duration = TimeSpan.Parse(reader.GetString(4))
+                        });
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("No sessions found");
+                }
+                connection.Close();
+                Console.WriteLine("----------------------------------------------------------------------------------------------------");
+                foreach (var session in tableData)
+                {
+                    Console.WriteLine($"{session.Id}. {session.Date.ToString("MM/dd/yyyy")} - Start time: {session.Start.ToString("hh:mm tt")} | End time: {session.End.ToString("hh:mm tt")} | Duration: {session.Duration.ToString(@"hh\:mm")}");
+                }
+                Console.WriteLine("----------------------------------------------------------------------------------------------------\n");
+            }
         }
     }
 }
