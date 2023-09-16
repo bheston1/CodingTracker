@@ -50,7 +50,7 @@ namespace CodingTracker
         internal static void UpdateSession()
         {
             ViewSessions();
-            var recordId = Helpers.GetIdInput("Enter Id of session to update or type 'r' to return to main menu: ");
+            var recordId = Helpers.GetIdInput("Enter Id of session to update: ");
             using (var connection = new SqliteConnection(connectionString))
             {
                 connection.Open();
@@ -62,10 +62,6 @@ namespace CodingTracker
                     Console.WriteLine("Enter valid Id");
                     connection.Close();
                     UpdateSession();
-                }
-                else if (Convert.ToString(checkQuery).Trim().ToLower() == "r")
-                {
-                    Menu.ShowMenu();
                 }
                 string sessionStart = Helpers.GetSessionTimes("Enter session start time (format hh:mm AM/PM): ");
                 string sessionEnd = Helpers.GetSessionTimes("Enter session end time (format hh:mm AM/PM): ");
