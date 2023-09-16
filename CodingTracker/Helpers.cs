@@ -60,19 +60,5 @@ namespace CodingTracker
                 key = Console.ReadKey(true);
             } while (key.Key != ConsoleKey.Enter);
         }
-
-        internal static void Startup()
-        {
-            string databasePath = ConfigurationManager.AppSettings.Get("DatabasePath");
-            bool databaseExists = File.Exists(databasePath);
-            if (!databaseExists)
-            {
-                DatabaseFunctions.CreateDB();
-            }
-            else
-            {
-                Menu.ShowMenu();
-            }
-        }
     }
 }

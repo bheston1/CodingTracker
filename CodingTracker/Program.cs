@@ -4,7 +4,8 @@
     {
         static void Main(string[] args)
         {
-            Helpers.Startup();
+            DatabaseFunctions.CreateDB();
+            Menu.ShowMenu();
         }
     }
 }
