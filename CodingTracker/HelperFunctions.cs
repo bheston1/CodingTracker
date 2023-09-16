@@ -9,6 +9,15 @@ namespace CodingTracker
 {
     internal class HelperFunctions
     {
+        internal static void PressEnter()
+        {
+            ConsoleKeyInfo key;
+            do
+            {
+                key = Console.ReadKey(true);
+            } while (key.Key != ConsoleKey.Enter);
+        }
+
         internal static void Startup()
         {
             string databasePath = ConfigurationManager.AppSettings.Get("DatabasePath");
@@ -19,7 +28,7 @@ namespace CodingTracker
             }
             else
             {
-
+                Menu.ShowMenu();
             }
         }
     }
