@@ -1,6 +1,8 @@
 # CodingTracker
 
-More SQLite practice in the form of a time tracker for coding sessions. Main purpose was to play around with DateTime to track sessions.
+More SQLite practice in the form of a time tracker for coding sessions. 
+
+Main purpose was to play around with DateTime a bit
 
 # Given Requirements:
  - [x] User should be able to log session times and view them with duration of session
